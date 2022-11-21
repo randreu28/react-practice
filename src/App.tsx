@@ -1,18 +1,23 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
-type Props = {};
+interface synonym {
+  score: number;
+  tags: string[];
+  word: string;
+}
 
-export default function App({}: Props) {
+export default function App() {
   const ref = useRef<HTMLInputElement>(null!);
+  const [synonyms, setSynonyms] = useState<synonym[]>([]);
 
   async function handleSearch() {
     const rawData = await fetch(
       `https://api.datamuse.com/words?ml=${ref.current.value}`
     );
 
-    const data = await rawData.json();
+    const data: synonym[] = await rawData.json();
 
-    await console.log(data);
+    setSynonyms(data);
 
     ref.current.value = "";
   }
@@ -28,6 +33,11 @@ export default function App({}: Props) {
         >
           Search
         </button>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mx-auto gap-x-32 text-xl capitalize">
+        {synonyms.map((synonym, key) => {
+          return <li key={key}>{synonym.word}</li>;
+        })}
       </div>
     </div>
   );

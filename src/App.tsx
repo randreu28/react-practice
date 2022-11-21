@@ -11,15 +11,19 @@ export default function App() {
   const [synonyms, setSynonyms] = useState<synonym[]>([]);
 
   async function handleSearch() {
-    const rawData = await fetch(
-      `https://api.datamuse.com/words?ml=${ref.current.value}`
-    );
+    const search = prepForAPI(ref.current.value);
+
+    const rawData = await fetch(`https://api.datamuse.com/words?ml=${search}`);
 
     const data: synonym[] = await rawData.json();
 
     setSynonyms(data);
 
     ref.current.value = "";
+  }
+
+  function prepForAPI(rawString: string) {
+    return rawString.split(" ").join("+");
   }
 
   return (

@@ -1,4 +1,4 @@
 export interface card {
   value: string;
-  state: "hidden" | "showing" | "isMatch";
+  state: "hidden" | "showing" | "isMatch" | "isWrong";
 }

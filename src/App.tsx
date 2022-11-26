@@ -4,17 +4,23 @@ import Card from "./components/Card";
 import type { card } from "./types";
 
 export default function App() {
-  const [board, setBoard] = useState<card[]>([
-    { value: "a", state: "hidden" },
-    { value: "a", state: "hidden" },
-    { value: "b", state: "hidden" },
-    { value: "b", state: "hidden" },
-    { value: "c", state: "hidden" },
-    { value: "c", state: "hidden" },
-    { value: "d", state: "hidden" },
-    { value: "d", state: "hidden" },
-    { value: "e", state: "hidden" },
-  ]);
+  /* Change these values as you like! 
+  Just make sure that (n*m) % 2 == 0 */
+  const n = 3;
+  const m = 3;
+
+  /* TODO:  Sometimes there are board values that do not pair with anything... */
+  function generateBoard(n: number, m: number): card[] {
+    const randomValues = ["a", "b", "c", "d", "e", "f", "g"];
+    return [...Array(n * m)].map(() => {
+      return {
+        value: randomValues[Math.floor(Math.random() * randomValues.length)],
+        state: "hidden",
+      };
+    });
+  }
+
+  const [board, setBoard] = useState<card[]>(generateBoard(n, m));
 
   function handleClick(index: number) {
     const clickedCard = board[index];
@@ -70,7 +76,13 @@ export default function App() {
     <div className="flex h-screen">
       <div className="m-auto text-4xl">
         <h1 className="text-4xl text-center pb-20">Memory game</h1>
-        <div className="grid grid-cols-3 grid-rows-3 gap-5">
+        <div
+          className="grid gap-5"
+          style={{
+            gridTemplateRows: `repeat(${n}, minmax(0, 1fr))`,
+            gridTemplateColumns: `repeat(${m}, minmax(0, 1fr))`,
+          }}
+        >
           {board.map((_, key) => {
             return (
               <Card
@@ -83,6 +95,14 @@ export default function App() {
             );
           })}
         </div>
+        <button
+          className="mx-auto bg-blue-600 rounded px-3 py-2 text-lg flex mt-10 hover:underline"
+          onClick={() => {
+            setBoard(generateBoard(n, m));
+          }}
+        >
+          Generate new board
+        </button>
       </div>
     </div>
   );

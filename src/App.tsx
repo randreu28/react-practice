@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Card from "./components/Card";
 
 import type { card } from "./types";
@@ -31,7 +31,22 @@ export default function App() {
           newBoard[index].state = "isMatch";
         } else {
           newBoard[prevIndex].state = "hidden";
-          alert("please try again");
+
+          async function showAndDismiss() {
+            const newBoard = [...board];
+
+            newBoard[prevIndex].state = "isWrong";
+            newBoard[index].state = "isWrong";
+            const delay = (ms: number) =>
+              new Promise((res) => setTimeout(res, ms));
+            await delay(1000);
+
+            newBoard[prevIndex].state = "hidden";
+            newBoard[index].state = "hidden";
+            setBoard(newBoard);
+          }
+
+          showAndDismiss();
         }
 
         setBoard(newBoard);

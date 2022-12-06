@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import getProjects from "./helpers/getProjects";
 import ReactMarkdown from "react-markdown";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
 export default function App() {

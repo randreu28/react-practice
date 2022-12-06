@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useQuery } from "react-query";
 
 export default function App() {
   type project = {
@@ -9,8 +10,8 @@ export default function App() {
 
   const [projects, setProjects] = useState<project[]>();
 
-  async function fetchRepoInfo() {
-    const rawQuery = await fetch(
+  async function getBranches() {
+    const res = await fetch(
       "https://api.github.com/repos/randreu28/react-practice/branches",
       {
         headers: {
@@ -18,12 +19,12 @@ export default function App() {
         },
       }
     );
-    return await rawQuery.json();
+    return res.json();
   }
 
-  useEffect(() => {
-    console.log(fetchRepoInfo());
-  }, []);
+  const { data, error, isLoading } = useQuery("getBranches", getBranches);
+
+  isLoading ? null : console.log(data);
 
   return (
     <div className="h-screen flex">

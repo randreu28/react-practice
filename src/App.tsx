@@ -29,6 +29,10 @@ export default function App() {
     dayjs.extend(relativeTime);
     return dayjs(date).fromNow();
   }
+
+  function isLast(key: number): boolean {
+    return key + 1 == data!.length && data!.length % 2 != 0;
+  }
   return (
     <>
       <a
@@ -62,7 +66,9 @@ export default function App() {
           {data?.map((project, key) => {
             return (
               <div
-                className="max-w-2xl px-8 py-4 rounded-lg shadow-md bg-gray-800 m-4"
+                className={`max-w-2xl px-8 py-4 rounded-lg shadow-md bg-gray-800 m-4 ${
+                  isLast(key) ? "md:col-span-2 md:mx-auto" : ""
+                }`}
                 key={key}
               >
                 <div className="flex items-center justify-between">

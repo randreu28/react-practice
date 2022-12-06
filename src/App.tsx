@@ -43,7 +43,7 @@ function App() {
           {colors.map((color, key) => {
             return (
               <button
-                className="bg-gray-200 rounded text-xl py-2 px-4"
+                className="bg-gray-700 rounded text-xl py-2 px-4"
                 key={key}
                 onClick={() => {
                   validateGuess(color);
@@ -58,7 +58,7 @@ function App() {
         <div className="flex justify-center text-xl">{feedback}</div>
         <br />
         <button
-          className="bg-blue-200 text-xl rounded px-4 py-2 flex mx-auto"
+          className="bg-blue-600 text-xl rounded px-4 py-2 flex mx-auto"
           onClick={resetGame}
         >
           Reset game

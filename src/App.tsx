@@ -33,6 +33,7 @@ export default function App() {
   function isLast(key: number): boolean {
     return key + 1 == data!.length && data!.length % 2 != 0;
   }
+
   return (
     <>
       <a
@@ -71,19 +72,19 @@ export default function App() {
                 }`}
                 key={key}
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-light text-gray-400 my-2">
-                    {formatDate(project.date)}
-                  </span>
-                </div>
                 <div className="mt-2">
-                  <h2
-                    className="text-2xl font-bold text-white capitalize"
-                    tabIndex={0}
-                    role="link"
-                  >
-                    {project.name.split("-").join(" ")}
-                  </h2>
+                  <div className="flex items-center justify-between">
+                    <h2
+                      className="text-2xl font-bold text-white capitalize"
+                      tabIndex={0}
+                      role="link"
+                    >
+                      {project.name.split("-").join(" ")}
+                    </h2>
+                    <span className="text-sm font-light text-gray-400 my-2">
+                      {formatDate(project.date)}
+                    </span>
+                  </div>
                   <ReactMarkdown className="prose prose-a:text-gray-300 mt-2 text-gray-300">
                     {project.description}
                   </ReactMarkdown>

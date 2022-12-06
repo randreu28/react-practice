@@ -1,6 +1,8 @@
 import { useQuery } from "react-query";
 import getProjects from "./helpers/getProjects";
 import ReactMarkdown from "react-markdown";
+import * as dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 export default function App() {
   const { data, error, isLoading } = useQuery("getProjects", getProjects);
@@ -21,6 +23,11 @@ export default function App() {
         </div>
       </div>
     );
+  }
+
+  function formatDate(date: string): string {
+    dayjs.extend(relativeTime);
+    return dayjs(date).fromNow();
   }
   return (
     <>
@@ -59,8 +66,8 @@ export default function App() {
                 key={key}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-light text-gray-400">
-                    {project.date}
+                  <span className="text-sm font-light text-gray-400 my-2">
+                    {formatDate(project.date)}
                   </span>
                 </div>
                 <div className="mt-2">

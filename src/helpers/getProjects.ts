@@ -30,6 +30,35 @@ async function getDates(res: any) {
   return dates;
 }
 
+async function getReadMes(branches: string[]) {
+  const downloadUrls = await Promise.all(
+    branches.map(async (branch) => {
+      const raw = await fetch(
+        `https://api.github.com/repos/randreu28/react-practice/readme?ref=${branch}`,
+        {
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_GH_API_KEY}`,
+          },
+        }
+      );
+
+      const res = await raw.json();
+
+      return res.download_url;
+    })
+  );
+
+  const readMes = await Promise.all(
+    downloadUrls.map(async (url) => {
+      const raw = await fetch(url);
+
+      return raw.text();
+    })
+  );
+
+  return readMes;
+}
+
 export default async function getProjects() {
   const rawRes = await fetch(
     "https://api.github.com/repos/randreu28/react-practice/branches",
@@ -45,12 +74,14 @@ export default async function getProjects() {
   const branches = getBranches(res);
   const urls = getUrls(branches);
   const dates = await getDates(res);
+  const descriptions = await getReadMes(branches);
 
   const projects: project[] = res.map((_: any, index: number) => {
     return {
       name: branches[index],
       date: dates[index],
       url: urls[index],
+      description: descriptions[index],
     };
   });
 

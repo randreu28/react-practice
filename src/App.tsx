@@ -1,28 +1,8 @@
-import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
+import getProjects from "./helpers/getProjects";
 
 export default function App() {
-  type project = {
-    name: string;
-    url: string;
-    date: string;
-  };
-
-  const [projects, setProjects] = useState<project[]>();
-
-  async function getBranches() {
-    const res = await fetch(
-      "https://api.github.com/repos/randreu28/react-practice/branches",
-      {
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_GH_API_KEY}`,
-        },
-      }
-    );
-    return res.json();
-  }
-
-  const { data, error, isLoading } = useQuery("getBranches", getBranches);
+  const { data, error, isLoading } = useQuery("getProjects", getProjects);
 
   isLoading ? null : console.log(data);
 

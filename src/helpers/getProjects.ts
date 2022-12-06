@@ -13,15 +13,21 @@ function getUrls(branches: string[]): string[] {
   });
 }
 
-async function getDate(url: string) {
-  const rawRes = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${import.meta.env.VITE_GH_API_KEY}`,
-    },
-  });
+async function getDates(res: any) {
+  const rawDates = await Promise.all(
+    res.map(async (resData: any) => {
+      const commitData = await fetch(resData.commit.url, {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_GH_API_KEY}`,
+        },
+      });
+      return commitData.json();
+    })
+  );
 
-  const res = await rawRes.json();
-  return res.commit.author.date;
+  const dates = rawDates.map((date) => date.commit.author.date);
+
+  return dates;
 }
 
 export default async function getProjects() {
@@ -38,16 +44,15 @@ export default async function getProjects() {
 
   const branches = getBranches(res);
   const urls = getUrls(branches);
+  const dates = await getDates(res);
 
-  const projects: project[] = await Promise.all(
-    res.map(async (resData: any, index: number) => {
-      return {
-        name: branches[index],
-        date: await getDate(resData.commit.url),
-        url: urls[index],
-      };
-    })
-  );
+  const projects: project[] = res.map((_: any, index: number) => {
+    return {
+      name: branches[index],
+      date: dates[index],
+      url: urls[index],
+    };
+  });
 
   /* Removes master branch */
   const filteredProjects = projects.filter(

@@ -1,0 +1,1 @@
+A school project using the [punk API](https://punkapi.com/documentation/v2) to create a paginated beer list table with a variety of beer information.

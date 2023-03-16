@@ -1,7 +1,7 @@
-import AddOns from "./steps/AddOns";
-import SelectPlan from "./steps/SelectPlan";
-import Summary from "./steps/Summary";
-import YourInfo from "./steps/YourInfo";
+import AddOns from "./components/steps/AddOns";
+import SelectPlan from "./components/steps/SelectPlan";
+import Summary from "./components/steps/Summary";
+import YourInfo from "./components/steps/YourInfo";
 import { useUser } from "./store";
 
 export default function App() {

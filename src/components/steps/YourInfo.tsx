@@ -1,4 +1,19 @@
+import { SubmitHandler, useForm } from "react-hook-form";
+import { infoType, useUser } from "../../store";
+
 export default function YourInfo() {
+  const { mutateInfo, mutateStep } = useUser();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<infoType>();
+  const onSubmit: SubmitHandler<infoType> = (info) => {
+    mutateInfo(info);
+    mutateStep(2);
+  };
+
+  //https://react-hook-form.com/ implement this?
   return (
     <>
       <h1 className="text-3xl font-bold text-blue-900 lg:text-5xl">
@@ -8,27 +23,36 @@ export default function YourInfo() {
         Please provide your name, email address, and phone number
       </p>
 
-      <form className="flex flex-col space-y-2">
+      <form
+        className="flex flex-col space-y-2"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <label className="text-blue-900 ">Name</label>
         <input
+          {...register("name", { required: true })}
           className="rounded-lg border-2 p-3 focus:outline-blue-900/50"
           type="text"
           placeholder="e.g Stephen King"
         />
+        {errors.name && <p className="text-red-500">This field is required</p>}
 
         <label className="pt-3 text-blue-900">Email address</label>
         <input
+          {...register("email", { required: true })}
           className="rounded-lg border-2 p-3 focus:outline-blue-900/50"
           type="email"
           placeholder="e.g Stephen King"
         />
+        {errors.email && <p className="text-red-500">This field is required</p>}
 
         <label className="pt-3 text-blue-900">Phone number</label>
         <input
+          {...register("phone", { required: true })}
           className="rounded-lg border-2 p-3 focus:outline-blue-900/50"
           type="tel"
           placeholder="e.g Stephen King"
         />
+        {errors.phone && <p className="text-red-500">This field is required</p>}
 
         <br />
 

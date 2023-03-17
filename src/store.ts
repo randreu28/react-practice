@@ -1,35 +1,35 @@
 import { create } from "zustand";
 
-interface infoType {
+export interface infoType {
   name: string;
   email: string;
   phone: string;
 }
 
-interface planType {
+export interface planType {
   type: "arcade" | "advanced" | "pro";
   billing: "monthly" | "yearly";
 }
 
-interface optionsType {
+export interface optionsType {
   onlineService: boolean;
   largerStorage: boolean;
   customProfile: boolean;
 }
 
-interface serviceType {
+export interface serviceType {
   plan?: planType;
   options?: optionsType;
 }
 
-interface userType {
+export interface userType {
   info?: infoType;
   service?: serviceType;
 }
 
-type stepType = 1 | 2 | 3 | 4;
+export type stepType = 1 | 2 | 3 | 4;
 
-interface storeType {
+export interface storeType {
   data?: userType;
   step: stepType;
   mutateStep: (by: stepType) => void;

@@ -47,12 +47,12 @@ export default function YourInfo() {
 
         <label className="pt-3 text-blue-900">Phone number</label>
         <input
-          {...register("phone", { required: true })}
+          {...register("tel", { required: true })}
           className="rounded-lg border-2 p-3 focus:outline-blue-900/50"
           type="tel"
           placeholder="e.g Stephen King"
         />
-        {errors.phone && <p className="text-red-500">This field is required</p>}
+        {errors.tel && <p className="text-red-500">This field is required</p>}
 
         <br />
 

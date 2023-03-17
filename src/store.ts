@@ -3,7 +3,7 @@ import { create } from "zustand";
 export interface infoType {
   name: string;
   email: string;
-  phone: string;
+  tel: string;
 }
 
 export interface planType {

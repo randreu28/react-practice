@@ -13,7 +13,6 @@ export default function YourInfo() {
     mutateStep(2);
   };
 
-  //https://react-hook-form.com/ implement this?
   return (
     <>
       <h1 className="text-3xl font-bold text-blue-900 lg:text-5xl">

@@ -2,14 +2,16 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { infoType, useUser } from "../../store";
 
 export default function YourInfo() {
-  const { mutateInfo, mutateStep } = useUser();
+  const { mutateData, mutateStep } = useUser();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<infoType>();
   const onSubmit: SubmitHandler<infoType> = (info) => {
-    mutateInfo(info);
+    console.log(info);
+
+    mutateData({ info: info });
     mutateStep(2);
   };
 

@@ -1,3 +1,4 @@
+import produce from "immer";
 import { create } from "zustand";
 
 export interface infoType {
@@ -6,9 +7,15 @@ export interface infoType {
   tel: string;
 }
 
+export enum plansType {
+  arcade = "arcade",
+  advanced = "advanced",
+  pro = "pro",
+}
+
 export interface planType {
-  type: "arcade" | "advanced" | "pro";
-  billing: "monthly" | "yearly";
+  type: plansType;
+  yearlyBilling: boolean;
 }
 
 export interface optionsType {
@@ -32,18 +39,22 @@ export type stepType = 1 | 2 | 3 | 4;
 export interface storeType {
   data?: userType;
   step: stepType;
-  mutateStep: (by: stepType) => void;
-  mutateInfo: (info: infoType) => void;
-  mutateOptions: (options: optionsType) => void;
-  mutatePlan: (plan: planType) => void;
+  mutateData: (newData: userType) => void;
+  mutateStep: (newStep: stepType) => void;
 }
 
 export const useUser = create<storeType>()((set) => ({
   step: 1,
-  mutateStep: (newStep) => set(() => ({ step: newStep })),
-  mutateInfo: (newInfo) => set(() => ({ data: { info: newInfo } })),
-  mutateOptions: (newPlan) =>
-    set(() => ({ data: { service: { options: newPlan } } })),
-  mutatePlan: (newPlan) =>
-    set(() => ({ data: { service: { plan: newPlan } } })),
+  mutateStep: (newStep) => {
+    set((oldStore) => {
+      oldStore.step = newStep;
+      return oldStore;
+    });
+  },
+  mutateData: (newData) =>
+    set((state) =>
+      produce(state, (draft) => {
+        draft.data = { ...draft.data, ...newData };
+      })
+    ),
 }));

@@ -46,10 +46,7 @@ export interface storeType {
 export const useUser = create<storeType>()((set) => ({
   step: 1,
   mutateStep: (newStep) => {
-    set((oldStore) => {
-      oldStore.step = newStep;
-      return oldStore;
-    });
+    set(() => ({ step: newStep }));
   },
   mutateData: (newData) =>
     set((state) =>

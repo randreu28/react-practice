@@ -1,21 +1,22 @@
-import { useRef, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { planType, useUser } from "../../store";
+import { useState } from "react";
+import {
+  SubmitHandler,
+  useForm,
+  UseFormRegister,
+  UseFormSetValue,
+} from "react-hook-form";
+import { plansType, planType, useUser } from "../../store";
 
 export default function SelectPlan() {
-  const { mutateStep, mutatePlan } = useUser();
-  const { register, handleSubmit } = useForm<planType>();
+  const { mutateStep, mutateData } = useUser();
+  const { register, setValue, handleSubmit } = useForm<planType>();
 
   const onSubmit: SubmitHandler<planType> = (plan) => {
-    mutatePlan(plan);
+    console.log(plan);
+
+    mutateData({ service: { plan: plan } });
     mutateStep(3);
   };
-
-  const plans = [
-    { image: "/icon-arcade.svg", title: "arcade", price: "9$/mo" },
-    { image: "/icon-advanced.svg", title: "advanced", price: "12$/mo" },
-    { image: "/icon-pro.svg", title: "pro", price: "15$/mo" },
-  ];
 
   return (
     <>
@@ -27,12 +28,12 @@ export default function SelectPlan() {
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-        <PlanSelector {...plans} />
+        <PlanSelector register={register} setValue={setValue} />
         <fieldset className="rouned-xl flex justify-center gap-5 rounded-xl bg-gray-100 p-2 text-gray-500">
           <p className="">Monthly</p>
           <label className="relative inline-flex cursor-pointer items-center">
             <input
-              {...register("billing")}
+              {...register("yearlyBilling")}
               type="checkbox"
               className="peer sr-only"
             />
@@ -62,28 +63,32 @@ export default function SelectPlan() {
   );
 }
 
-type Props = {
+type test = {
   image: string;
-  title: string;
+  title: plansType;
   price: string;
 }[];
 
-function PlanSelector(plans: Props) {
-  const select = useRef<HTMLSelectElement>(null!);
-  const [activePlan, setActivePlan] = useState<number>(0);
+const plans: test = [
+  { image: "/icon-arcade.svg", title: plansType.arcade, price: "9$/mo" },
+  { image: "/icon-advanced.svg", title: plansType.advanced, price: "12$/mo" },
+  { image: "/icon-pro.svg", title: plansType.pro, price: "15$/mo" },
+];
 
-  const { register } = useForm<planType>();
+type Props = {
+  register: UseFormRegister<planType>;
+  setValue: UseFormSetValue<planType>;
+};
+
+function PlanSelector({ register, setValue }: Props) {
+  const [activePlan, setActivePlan] = useState<number>(0);
 
   return (
     <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-      <select ref={select} className="sr-only">
+      <select {...register("type")} className="sr-only">
         {plans.map((plan, key) => {
           return (
-            <option
-              {...register("type", { required: true })}
-              key={key}
-              value={plan.title}
-            >
+            <option key={key} value={plan.title}>
               {plan.title}
             </option>
           );
@@ -94,7 +99,7 @@ function PlanSelector(plans: Props) {
           <fieldset key={key}>
             <label
               onClick={() => {
-                select.current.value = plan.title;
+                setValue("type", plan.title as plansType);
                 setActivePlan(key);
               }}
               className={`flex h-44 flex-col justify-between rounded-xl bg-gray-100 p-5 duration-300 hover:cursor-pointer ${

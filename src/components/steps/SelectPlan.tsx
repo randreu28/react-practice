@@ -1,19 +1,17 @@
-import { useState } from "react";
 import {
   SubmitHandler,
   useForm,
   UseFormRegister,
   UseFormSetValue,
+  UseFormWatch,
 } from "react-hook-form";
 import { plansType, planType, useUser } from "../../store";
 
 export default function SelectPlan() {
   const { mutateStep, mutateData } = useUser();
-  const { register, setValue, handleSubmit } = useForm<planType>();
+  const { register, setValue, watch, handleSubmit } = useForm<planType>();
 
   const onSubmit: SubmitHandler<planType> = (plan) => {
-    console.log(plan);
-
     mutateData({ service: { plan: plan } });
     mutateStep(3);
   };
@@ -28,7 +26,7 @@ export default function SelectPlan() {
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-        <PlanSelector register={register} setValue={setValue} />
+        <PlanSelector register={register} setValue={setValue} watch={watch} />
         <fieldset className="rouned-xl flex justify-center gap-5 rounded-xl bg-gray-100 p-2 text-gray-500">
           <p className="">Monthly</p>
           <label className="relative inline-flex cursor-pointer items-center">
@@ -72,14 +70,19 @@ const plans = [
 type Props = {
   register: UseFormRegister<planType>;
   setValue: UseFormSetValue<planType>;
+  watch: UseFormWatch<planType>;
 };
 
-function PlanSelector({ register, setValue }: Props) {
-  const [activePlan, setActivePlan] = useState<number>(0);
+function PlanSelector({ register, setValue, watch }: Props) {
+  const type = watch("type", plansType.arcade);
 
   return (
     <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-      <select {...register("type")} className="sr-only">
+      <select
+        {...register("type")}
+        defaultValue={plansType.arcade}
+        className="sr-only"
+      >
         {plans.map((plan, key) => {
           return (
             <option key={key} value={plan.title}>
@@ -93,11 +96,10 @@ function PlanSelector({ register, setValue }: Props) {
           <fieldset key={key}>
             <label
               onClick={() => {
-                setValue("type", plan.title as plansType);
-                setActivePlan(key);
+                setValue("type", plan.title);
               }}
               className={`flex h-44 flex-col justify-between rounded-xl bg-gray-100 p-5 duration-300 hover:cursor-pointer ${
-                activePlan == key && "ring-2 ring-blue-500"
+                type == plan.title && "ring-2 ring-blue-500"
               }`}
             >
               <img src={plan.image} className="mr-auto" />

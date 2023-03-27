@@ -9,8 +9,6 @@ export default function YourInfo() {
     formState: { errors },
   } = useForm<infoType>();
   const onSubmit: SubmitHandler<infoType> = (info) => {
-    console.log(info);
-
     mutateData({ info: info });
     mutateStep(2);
   };

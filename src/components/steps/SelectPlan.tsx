@@ -63,13 +63,7 @@ export default function SelectPlan() {
   );
 }
 
-type test = {
-  image: string;
-  title: plansType;
-  price: string;
-}[];
-
-const plans: test = [
+const plans = [
   { image: "/icon-arcade.svg", title: plansType.arcade, price: "9$/mo" },
   { image: "/icon-advanced.svg", title: plansType.advanced, price: "12$/mo" },
   { image: "/icon-pro.svg", title: plansType.pro, price: "15$/mo" },

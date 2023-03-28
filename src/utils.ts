@@ -1,4 +1,4 @@
-import { optionsType, plansType } from "./store";
+import { optionsType, plansType, planType } from "./store";
 
 export function titleCase(str: string) {
   let splitStr = str.toLowerCase().split(" ");
@@ -31,7 +31,10 @@ export function getPlanPrices(planType: plansType, isYearly: boolean): string {
   }
 }
 
-export function getAddOnsPrices(addOn: keyof optionsType, isYearly?: boolean) {
+export function getAddOnsPrices(
+  addOn: string | keyof optionsType,
+  isYearly?: boolean
+) {
   const billingModifier = isYearly ? 12 : 1;
   const tag = isYearly ? "$/yr" : "$/mo";
   switch (addOn) {
@@ -43,5 +46,29 @@ export function getAddOnsPrices(addOn: keyof optionsType, isYearly?: boolean) {
 
     case "customProfile":
       return "+" + 2 * billingModifier + tag;
+
+    case "default":
+      throw Error(`addOn ${addOn} does not exist`);
   }
+}
+
+export function getFinalPrice(plan: planType, options: optionsType) {
+  let sum: number = 0;
+
+  switch (plan.type) {
+    case plansType.pro:
+      sum = sum + 9 * (plan.yearlyBilling ? 12 : 1);
+
+    case plansType.advanced:
+      sum = sum + 12 * (plan.yearlyBilling ? 12 : 1);
+
+    case plansType.arcade:
+      sum = sum + 15 * (plan.yearlyBilling ? 12 : 1);
+  }
+
+  if (options.onlineService) sum = sum + 1 * (plan.yearlyBilling ? 12 : 1);
+  if (options.customProfile) sum = sum + 2 * (plan.yearlyBilling ? 12 : 1);
+  if (options.largerStorage) sum = sum + 2 * (plan.yearlyBilling ? 12 : 1);
+
+  return `+${sum}$/ ${plan.yearlyBilling ? "yr" : "mo"}`;
 }

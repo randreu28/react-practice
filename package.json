@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.0.16",
-    "immer": "^9.0.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.5",

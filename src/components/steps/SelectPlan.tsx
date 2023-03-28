@@ -6,6 +6,7 @@ import {
   UseFormWatch,
 } from "react-hook-form";
 import { plansType, planType, useUser } from "../../store";
+import { getPlanPrices } from "../../utils";
 
 export default function SelectPlan() {
   const { mutateStep, mutateData } = useUser();
@@ -62,9 +63,9 @@ export default function SelectPlan() {
 }
 
 const plans = [
-  { image: "/icon-arcade.svg", title: plansType.arcade, price: "9$/mo" },
-  { image: "/icon-advanced.svg", title: plansType.advanced, price: "12$/mo" },
-  { image: "/icon-pro.svg", title: plansType.pro, price: "15$/mo" },
+  { image: "/icon-arcade.svg", title: plansType.arcade },
+  { image: "/icon-advanced.svg", title: plansType.advanced },
+  { image: "/icon-pro.svg", title: plansType.pro },
 ];
 
 type Props = {
@@ -75,6 +76,7 @@ type Props = {
 
 function PlanSelector({ register, setValue, watch }: Props) {
   const type = watch("type", plansType.arcade);
+  const isYearly = watch("yearlyBilling", false);
 
   return (
     <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
@@ -108,7 +110,9 @@ function PlanSelector({ register, setValue, watch }: Props) {
                 <h1 className="text-lg font-bold capitalize text-blue-900">
                   {plan.title}
                 </h1>
-                <p className="text-gray-500">{plan.price}</p>
+                <p className="text-gray-500">
+                  {getPlanPrices(plan.title, isYearly)}
+                </p>
               </span>
             </label>
           </fieldset>

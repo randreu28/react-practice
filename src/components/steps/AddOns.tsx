@@ -7,28 +7,27 @@ import {
   UseFormRegister,
   UseFormWatch,
 } from "react-hook-form";
-import { titleCase } from "../../utils";
+import { getAddOnsPrices, titleCase } from "../../utils";
 
 const addOns = [
   {
     title: "online service",
     description: "Access to multiplayer games",
-    price: 1,
   },
   {
     title: "larger storage",
     description: "Extra 1TB of cloud service",
-    price: 2,
   },
   {
-    title: "customizable profile",
+    title: "custom profile",
     description: "Custom theme on your profile",
-    price: 2,
   },
 ];
 
 export default function AddOns() {
-  const { mutateData, mutateStep } = useUser();
+  const { mutateData, mutateStep, data } = useUser();
+
+  const isYearly = data!.service!.plan!.yearlyBilling;
 
   const { register, watch, handleSubmit } = useForm<optionsType>();
 
@@ -48,7 +47,13 @@ export default function AddOns() {
 
       <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
         {addOns.map((addOn, key) => (
-          <AddOn key={key} register={register} addOn={addOn} watch={watch} />
+          <AddOn
+            key={key}
+            register={register}
+            addOn={addOn}
+            watch={watch}
+            isYearly={isYearly}
+          />
         ))}
 
         <div className="flex justify-between">
@@ -76,9 +81,10 @@ type Props = {
   addOn: (typeof addOns)[0];
   register: UseFormRegister<optionsType>;
   watch: UseFormWatch<optionsType>;
+  isYearly: boolean;
 };
 
-function AddOn({ addOn, register, watch }: Props) {
+function AddOn({ addOn, register, watch, isYearly }: Props) {
   const registerName = titleCase(addOn.title) as keyof optionsType;
   const currentOptions = watch(registerName, true);
 
@@ -103,7 +109,9 @@ function AddOn({ addOn, register, watch }: Props) {
         </div>
       </div>
 
-      <p className="my-auto">+{addOn.price}$/mo</p>
+      <p className="my-auto">
+        {getAddOnsPrices(titleCase(addOn.title) as keyof optionsType, isYearly)}
+      </p>
     </fieldset>
   );
 }

@@ -8,3 +8,8 @@ export function titleCase(str: string) {
   }
   return splitStr.join("");
 }
+
+export function validatePhoneNumber(value: string) {
+  const regex = /^[+]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/;
+  return regex.test(value) || "Please enter a valid phone number";
+}

@@ -1,5 +1,6 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { infoType, useUser } from "../../store";
+import { validatePhoneNumber } from "../../utils";
 
 export default function YourInfo() {
   const { mutateData, mutateStep } = useUser();
@@ -46,12 +47,15 @@ export default function YourInfo() {
 
         <label className="pt-3 text-blue-900">Phone number</label>
         <input
-          {...register("tel", { required: true })}
+          {...register("tel", {
+            required: true,
+            validate: validatePhoneNumber,
+          })}
           className="rounded-lg border-2 p-3 focus:outline-blue-900/50"
           type="tel"
           placeholder="e.g Stephen King"
         />
-        {errors.tel && <p className="text-red-500">This field is required</p>}
+        {errors.tel && <p className="text-red-500">{errors.tel.message}</p>}
 
         <br />
 

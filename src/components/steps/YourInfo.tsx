@@ -3,15 +3,16 @@ import { infoType, useUser } from "../../store";
 import { validatePhoneNumber } from "../../utils";
 
 export default function YourInfo() {
-  const { mutateData, mutateStep } = useUser();
+  const { updateInfo, goToStep } = useUser();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<infoType>();
+
   const onSubmit: SubmitHandler<infoType> = (info) => {
-    mutateData({ info: info });
-    mutateStep(2);
+    updateInfo(info);
+    goToStep(2);
   };
 
   return (

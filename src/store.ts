@@ -1,4 +1,3 @@
-import produce from "immer";
 import { create } from "zustand";
 
 export interface infoType {
@@ -25,33 +24,30 @@ export interface optionsType {
 }
 
 export interface serviceType {
-  plan?: planType;
-  options?: optionsType;
-}
-
-export interface userType {
-  info?: infoType;
-  service?: serviceType;
+  plan: planType;
+  options: optionsType;
 }
 
 export type stepType = 1 | 2 | 3 | 4;
 
 export interface storeType {
-  data?: userType;
+  info?: infoType;
+  plan?: planType;
+  options?: optionsType;
   step: stepType;
-  mutateData: (newData: userType) => void;
-  mutateStep: (newStep: stepType) => void;
+  goToStep: (newStep: stepType) => void;
+
+  updateInfo: (updatedInfo: infoType) => void;
+  updatePlan: (updatedPlan: planType) => void;
+  updateOptions: (updatedOptions: optionsType) => void;
 }
 
 export const useUser = create<storeType>()((set) => ({
   step: 1,
-  mutateStep: (newStep) => {
+  goToStep: (newStep) => {
     set(() => ({ step: newStep }));
   },
-  mutateData: (newData) =>
-    set((state) =>
-      produce(state, (draft) => {
-        draft.data = { ...draft.data, ...newData };
-      })
-    ),
+  updateInfo: (updatedInfo) => set(() => ({ info: updatedInfo })),
+  updatePlan: (updatedPlan) => set(() => ({ plan: updatedPlan })),
+  updateOptions: (updatedOptions) => set(() => ({ options: updatedOptions })),
 }));

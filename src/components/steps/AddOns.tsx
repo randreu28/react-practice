@@ -25,15 +25,12 @@ const addOns = [
 ];
 
 export default function AddOns() {
-  const { mutateData, mutateStep, data } = useUser();
-
-  const isYearly = data!.service!.plan!.yearlyBilling;
-
+  const { updateOptions, goToStep, plan } = useUser();
   const { register, watch, handleSubmit } = useForm<optionsType>();
 
   const onSubmit: SubmitHandler<optionsType> = (options) => {
-    mutateData({ service: { options: options } });
-    mutateStep(4);
+    updateOptions(options);
+    goToStep(4);
   };
 
   return (
@@ -52,7 +49,7 @@ export default function AddOns() {
             register={register}
             addOn={addOn}
             watch={watch}
-            isYearly={isYearly}
+            isYearly={plan!.yearlyBilling}
           />
         ))}
 
@@ -60,7 +57,7 @@ export default function AddOns() {
           <button
             className="rounded-lg px-2 py-3 text-gray-500 focus:outline-blue-400"
             onClick={() => {
-              mutateStep(2);
+              goToStep(2);
             }}
           >
             Go back

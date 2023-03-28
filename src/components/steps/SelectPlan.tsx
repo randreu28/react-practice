@@ -9,12 +9,12 @@ import { plansType, planType, useUser } from "../../store";
 import { getPlanPrices } from "../../utils";
 
 export default function SelectPlan() {
-  const { mutateStep, mutateData } = useUser();
+  const { goToStep, updatePlan } = useUser();
   const { register, setValue, watch, handleSubmit } = useForm<planType>();
 
   const onSubmit: SubmitHandler<planType> = (plan) => {
-    mutateData({ service: { plan: plan } });
-    mutateStep(3);
+    updatePlan(plan);
+    goToStep(3);
   };
 
   return (
@@ -45,7 +45,7 @@ export default function SelectPlan() {
           <button
             className="rounded-lg px-2 py-3 text-gray-500 focus:outline-blue-400"
             onClick={() => {
-              mutateStep(1);
+              goToStep(1);
             }}
           >
             Go back

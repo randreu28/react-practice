@@ -57,18 +57,19 @@ export function getFinalPrice(plan: planType, options: optionsType) {
 
   switch (plan.type) {
     case plansType.pro:
-      sum = sum + 9 * (plan.yearlyBilling ? 12 : 1);
-
+      sum = sum + 15 * (plan.yearlyBilling ? 12 : 1);
+      break;
     case plansType.advanced:
       sum = sum + 12 * (plan.yearlyBilling ? 12 : 1);
-
+      break;
     case plansType.arcade:
-      sum = sum + 15 * (plan.yearlyBilling ? 12 : 1);
+      sum = sum + 9 * (plan.yearlyBilling ? 12 : 1);
+      break;
   }
 
   if (options.onlineService) sum = sum + 1 * (plan.yearlyBilling ? 12 : 1);
   if (options.customProfile) sum = sum + 2 * (plan.yearlyBilling ? 12 : 1);
   if (options.largerStorage) sum = sum + 2 * (plan.yearlyBilling ? 12 : 1);
 
-  return `+${sum}$/ ${plan.yearlyBilling ? "yr" : "mo"}`;
+  return `+${sum}$/${plan.yearlyBilling ? "yr" : "mo"}`;
 }
